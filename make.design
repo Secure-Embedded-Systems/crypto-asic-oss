@@ -1,0 +1,33 @@
+all:
+	@echo "Targets are:"
+	@echo "   rtlsim       RTL simulation"
+	@echo "   synthesis    logic synthesis"
+	@echo "   glschematic  creates a gate level schematic"
+	@echo "   glsim        gate level simulation"
+	@echo "   gltiming     static timing analysis"
+
+
+$(FOLDER)/work/makefile: scripts/gen_make_design.py
+	test -d $(FOLDER)/work || mkdir -p $(FOLDER)/work
+	python3 scripts/gen_make_design.py
+
+rtlsim: $(FOLDER)/work/makefile
+	cd $(FOLDER)/work && make rtlsim
+
+synthesis: $(FOLDER)/work/makefile
+	cd $(FOLDER)/work && make synthesis
+
+glschematic: $(FOLDER)/work/makefile
+	cd $(FOLDER)/work && make glschematic
+
+glsim: $(FOLDER)/work/makefile
+	cd $(FOLDER)/work && make glsim
+
+gltiming: $(FOLDER)/work/makefile
+	cd $(FOLDER)/work && make gltiming
+
+clean:
+ifndef FOLDER
+       $(error FOLDER is undefined. Don't run this make.design directly.)
+endif
+	rm -rf $(FOLDER)/work *~

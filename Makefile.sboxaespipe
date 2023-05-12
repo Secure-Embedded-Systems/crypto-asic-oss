@@ -1,0 +1,38 @@
+# base folder of the design
+export FOLDER = sboxaespipe
+
+# toplevel module
+export TOP = sbox
+
+# testbench in $(FOLDER)/sim, creates trace.vcd
+export TB = sboxtb.v
+
+# standard cell library timing
+export LIB = /root/skywater-pdk/libraries/sky130_fd_sc_hd/latest/timing/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+# simulation view of cells
+export CELLS = /root/skywater-pdk/libraries/sky130_fd_sc_hd/latest/cells
+
+# clock period in ns
+export CLOCK = 3
+
+# name of the clock net (comment out for combinational networks)
+export CLOCKNAME = clk
+
+# input delay constraint, normally 0
+export INPUTDELAY = 0
+
+# output delay constraint, normally 0
+export OUTPUTDELAY = 0
+
+# list of inputs (with input delay constraint)
+export INPUTS = in
+
+# list of outputs (with output delay constraint)
+export OUTPUTS = out
+
+# synthesis script for logic optimization
+export ABC = abc.speed
+
+# don't touch
+include make.design
