@@ -25,14 +25,11 @@ export INPUTDELAY = 0
 # output delay constraint, normally 0
 export OUTPUTDELAY = 0
 
-# list of inputs (with input delay constraint)
-export INPUTS = in
-
-# list of outputs (with output delay constraint)
-export OUTPUTS = out
-
 # synthesis script for logic optimization
 export ABC = abc.speed
+
+# chip configuration
+export CHIPCONFIG = config.mk
 
 # don't touch
 include make.design

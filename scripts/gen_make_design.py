@@ -1,23 +1,58 @@
 import sys,os,csv
 
 # first test vector index to use in stimuli file; normally 0
-FOLDER      = os.environ['FOLDER']
-TB          = os.environ['TB']
-TOP         = os.environ['TOP']
-LIB         = os.environ['LIB']
-CELLS       = os.environ['CELLS']
+if 'FOLDER' in os.environ:
+    FOLDER      = os.environ['FOLDER']
+else:
+    sys.exit("Missing FOLDER definition in Makefile")
+
+if 'TB' in os.environ:
+    TB          = os.environ['TB']
+else:
+    sys.exit("Missing TB definition in Makefile")
+    
+if 'TOP' in os.environ:
+    TOP         = os.environ['TOP']
+else:
+    sys.exit("Missing TOP definition in Makefile")
+
+if 'LIB' in os.environ:
+    LIB         = os.environ['LIB']
+else:
+    sys.exit("Missing LIB definition in Makefile")
+
+if 'CELLS' in os.environ:
+    CELLS       = os.environ['CELLS']
+else:
+    sys.exit("Missing CELLS definition in Makefile")
+
 CLOCK       = os.environ['CLOCK']
 if 'CLOCKNAME' in os.environ:
     CLOCKNAME   = os.environ['CLOCKNAME']
     clocknetpresent = 1
 else:
     clocknetpresent = 0
-INPUTDELAY  = os.environ['INPUTDELAY']
-OUTPUTDELAY = os.environ['OUTPUTDELAY']
-INPUTS      = os.environ['INPUTS']
-OUTPUTS     = os.environ['OUTPUTS']
-ABC         = os.environ['ABC']
 
+if 'INPUTDELAY' in os.environ:
+    INPUTDELAY  = os.environ['INPUTDELAY']
+else:
+    sys.exit("Missing INPUTDELAY definition in Makefile")
+
+if 'OUTPUTDELAY' in os.environ:
+    OUTPUTDELAY = os.environ['OUTPUTDELAY']
+else:
+    sys.exit("Missing OUTPUTDELAY definition in Makefile")
+
+if 'ABC' in os.environ:
+    ABC         = os.environ['ABC']
+else:
+    sys.exit("Missing ABC definition in Makefile")
+
+if 'CHIPCONFIG' in os.environ:
+    CHIPCONFIG  = os.environ['CHIPCONFIG']
+else:
+    sys.exit("Missing CHIPCONFIG definition in Makefile")
+    
 def create_makefile():
     makefile_name = FOLDER + '/work/makefile';
     with open(makefile_name, 'w') as makefile:
@@ -70,6 +105,30 @@ def create_makefile():
         makefile.write('\t./a.out && mv trace.vcd netlist.vcd && rm -f a.out\n')
         makefile.write('\n')
 
+        makefile.write('openroad: \n')
+        makefile.write('\txhost +; docker run --rm -it \\\n')
+        makefile.write('\t-u $(id -u ${USER}):$(id -g ${USER}) \\\n')
+        makefile.write('\t--network=host --env DISPLAY=${DISPLAY} \\\n')
+        makefile.write('\t--privileged \\\n')
+        makefile.write('\t--workdir=/OpenROAD-flow-scripts/flow/crypto-asic \\\n')
+        makefile.write('\t--volume=\"/root/.Xauthority:/root/.Xauthority:rw\" \\\n')
+        makefile.write('\t-v /usr/share/X11/xkb:/usr/share/X11/xkb \\\n')
+        makefile.write('\t-v /root/crypto-asic:/OpenROAD-flow-scripts/flow/crypto-asic \\\n')
+        makefile.write('\topenroad/flow-centos7-builder\n')
+        makefile.write('\n')
+
+        makefile.write('chip: \n')
+        makefile.write('\t(source ../../../../env.sh && cd ../../.. && make DESIGN_CONFIG=crypto-asic/' + FOLDER + '/chip/' + CHIPCONFIG + ')\n')
+        makefile.write('\n')
+
+        makefile.write('chipdata: \n')
+        makefile.write('\t(cp -r ../../../logs/sky130hd/' + TOP + ' logs && cp -r ../../../results/sky130hd/' + TOP + ' results && cp -r ../../../reports/sky130hd/' + TOP + ' reports) \n')
+        makefile.write('\n')
+
+        makefile.write('chipgui: \n')
+        makefile.write('\t(source ../../../../env.sh && cd ../../.. && make DESIGN_CONFIG=crypto-asic/' + FOLDER + '/chip/' + CHIPCONFIG + ' gui_final)\n')
+        makefile.write('\n')
+
         makefile.write('clean:\n')
         makefile.write('\trm -f *~ \\\n')
         makefile.write('\ta.out \\\n')
@@ -116,18 +175,37 @@ def create_sta():
         sta.write('\n')
         if (clocknetpresent == 1):
             sta.write('create_clock -name clk -period ' + CLOCK + ' {' + CLOCKNAME + '}\n')
+            sta.write('set non_clock_inputs [lsearch -inline -all -not -exact [all_inputs] ' + CLOCKNAME + ']\n')
+            sta.write('set_input_delay ' + INPUTDELAY + ' -clock clk $non_clock_inputs\n')
         else:
             sta.write('create_clock -name clk -period ' + CLOCK + '\n')
-        sta.write('set_input_delay -clock clk ' + INPUTDELAY + ' {' + INPUTS + '}\n')
-        sta.write('set_output_delay -clock clk ' + OUTPUTDELAY + ' {' + OUTPUTS + '}\n')
+            sta.write('set_input_delay ' + INPUTDELAY + ' -clock clk [all_inputs]\n')
+        sta.write('set_output_delay ' + OUTPUTDELAY + ' -clock clk [all_outputs]\n')
         sta.write('\n')
         sta.write('report_checks\n')
         sta.write('report_power\n')
         sta.write('\n')
         sta.write('exit')
+
+def create_chipsdc():
+    sdc_name = FOLDER + '/work/constraint.sdc'
+    with open(sdc_name, 'w') as sdc:
+        sdc.write('current_design ' + TOP + '\n')
+        sdc.write('set clk_period ' + CLOCK + '\n')
+        sdc.write('\n')
+        if (clocknetpresent == 1):
+            sdc.write('create_clock -name clk -period $clk_period {' + CLOCKNAME + '}\n')
+            sdc.write('set non_clock_inputs [lsearch -inline -all -not -exact [all_inputs] ' + CLOCKNAME + ']\n')
+            sdc.write('set_input_delay ' + INPUTDELAY + ' -clock clk $non_clock_inputs\n')
+        else:
+            sdc.write('create_clock -name clk -period $clk_period\n')
+            sdc.write('set_input_delay ' + INPUTDELAY + ' -clock clk [all_inputs]\n')
+        sdc.write('set_output_delay ' + OUTPUTDELAY + ' -clock clk [all_outputs]\n')
+        sdc.write('\n')
     
+
 if __name__ == '__main__':
         create_makefile()
         create_synthys()
         create_sta()
-        
+        create_chipsdc()

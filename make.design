@@ -5,6 +5,7 @@ all:
 	@echo "   glschematic  creates a gate level schematic"
 	@echo "   glsim        gate level simulation"
 	@echo "   gltiming     static timing analysis"
+	@echo "   chip         OpenROAD chip synthesis"
 
 
 $(FOLDER)/work/makefile: scripts/gen_make_design.py
@@ -25,6 +26,18 @@ glsim: $(FOLDER)/work/makefile
 
 gltiming: $(FOLDER)/work/makefile
 	cd $(FOLDER)/work && make gltiming
+
+openroad: $(FOLDER)/work/makefile
+	cd $(FOLDER)/work && make openroad
+
+chip: 
+	cd $(FOLDER)/work && make chip
+
+chipdata: 
+	cd $(FOLDER)/work && make chipdata
+
+chipgui: 
+	cd $(FOLDER)/work && make chipgui
 
 clean:
 ifndef FOLDER
