@@ -3,8 +3,19 @@
 module toptb();
    reg  [3:0]  in;   
    wire [3:0] out;
+   reg 	      clk;
+   reg 	      scand;
+   wire       scanq;
    
-   sbox dut(.in(in), .out(out));
+   sbox dut(.in(in), .out(out), .clk(clk), .scand(scand), .scanq(scanq));
+
+   always begin
+      clk = 1'b0;
+      #5 clk = 1'b1;
+      #5;
+   end
+
+   initial scand = 1'b0;
    
    initial
      begin

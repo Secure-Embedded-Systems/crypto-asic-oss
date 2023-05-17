@@ -1,6 +1,12 @@
 module sbox(input  wire [3:0] in, 
-	    output reg  [3:0] out);
+	    output reg  [3:0] out,
+	    input wire clk,
+	    input wire scand,
+	    output reg scanq);
 
+   always @(posedge clk)
+     scanq <= scand;
+   
    always @ (in) begin
       case (in)
 	4'h0: out = 4'hc;

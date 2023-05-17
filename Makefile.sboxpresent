@@ -16,6 +16,9 @@ export CELLS = /root/skywater-pdk/libraries/sky130_fd_sc_hd/latest/cells
 # clock period
 export CLOCK = 2
 
+# name of the clock net
+export CLOCKNAME = clk
+
 # input delay constraint, normally 0
 export INPUTDELAY = 0
 
