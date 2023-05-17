@@ -110,15 +110,15 @@ def create_makefile():
         makefile.write('\t-u $(id -u ${USER}):$(id -g ${USER}) \\\n')
         makefile.write('\t--network=host --env DISPLAY=${DISPLAY} \\\n')
         makefile.write('\t--privileged \\\n')
-        makefile.write('\t--workdir=/OpenROAD-flow-scripts/flow/crypto-asic \\\n')
+        makefile.write('\t--workdir=/OpenROAD-flow-scripts/flow/crypto-asic-oss \\\n')
         makefile.write('\t--volume=\"/root/.Xauthority:/root/.Xauthority:rw\" \\\n')
         makefile.write('\t-v /usr/share/X11/xkb:/usr/share/X11/xkb \\\n')
-        makefile.write('\t-v /root/crypto-asic:/OpenROAD-flow-scripts/flow/crypto-asic \\\n')
+        makefile.write('\t-v /root/crypto-asic-oss:/OpenROAD-flow-scripts/flow/crypto-asic-oss \\\n')
         makefile.write('\topenroad/flow-centos7-builder\n')
         makefile.write('\n')
 
         makefile.write('chip: \n')
-        makefile.write('\t(source ../../../../env.sh && cd ../../.. && make DESIGN_CONFIG=crypto-asic/' + FOLDER + '/chip/' + CHIPCONFIG + ')\n')
+        makefile.write('\t(source ../../../../env.sh && cd ../../.. && make DESIGN_CONFIG=crypto-asic-oss/' + FOLDER + '/chip/' + CHIPCONFIG + ')\n')
         makefile.write('\n')
 
         makefile.write('chipdata: \n')
@@ -126,7 +126,7 @@ def create_makefile():
         makefile.write('\n')
 
         makefile.write('chipgui: \n')
-        makefile.write('\t(source ../../../../env.sh && cd ../../.. && make DESIGN_CONFIG=crypto-asic/' + FOLDER + '/chip/' + CHIPCONFIG + ' gui_final)\n')
+        makefile.write('\t(source ../../../../env.sh && cd ../../.. && make DESIGN_CONFIG=crypto-asic-oss/' + FOLDER + '/chip/' + CHIPCONFIG + ' gui_final)\n')
         makefile.write('\n')
 
         makefile.write('clean:\n')
