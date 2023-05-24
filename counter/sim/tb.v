@@ -1,6 +1,6 @@
 module tb();
    reg 	      clk, reset;
-   wire [15:0] q;
+   wire [3:0] q;
    
    counter dut(.clk(clk), .reset(reset), .q(q));
    
@@ -22,8 +22,9 @@ module tb();
 	repeat (3) @(posedge clk);
 	
 	reset = 1'b0;
+
 	
-	repeat (200) 
+	repeat (50) 
 	  begin
 	     $display("%x", q);
 	     @(posedge clk);

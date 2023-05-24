@@ -44,8 +44,7 @@ chipdata:
 chipgui: 
 	cd $(FOLDER)/work && make chipgui
 
-clean:
-ifndef FOLDER
-       $(error FOLDER is undefined. Don't run this make.design directly.)
-endif
-	rm -rf $(FOLDER)/work *~
+distclean: Makefile.*
+	@for file in $^; do \
+		(test -d $${file##*.}/work && rm -rf  $${file##*.}/work) || true; \
+	done

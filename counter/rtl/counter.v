@@ -1,10 +1,10 @@
 module counter(
 	       input wire 	 clk,
 	       input wire 	 reset, 
-	       output wire [15:0] q);
+	       output wire [3:0] q);
    
-   reg [15:0] 			  areg;
-   reg [15:0] 			  areg_next;
+   reg [3:0] 			  areg;
+   reg [3:0] 			  areg_next;
    
    always @(posedge clk, posedge reset)
      if (reset)
@@ -13,7 +13,7 @@ module counter(
        areg  <= areg_next;
    
    always @(*)
-     areg_next = areg + 16'b1;
+     areg_next = areg + 4'b1;
    
    assign q = areg;
    
