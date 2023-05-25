@@ -1,0 +1,19 @@
+read_liberty -lib /root/skywater-pdk/libraries/sky130_fd_sc_hd/latest/timing/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog ../rtl/counter.v
+
+synth -top counter
+
+flatten 
+
+opt -purge
+
+dfflibmap -liberty /root/skywater-pdk/libraries/sky130_fd_sc_hd/latest/timing/sky130_fd_sc_hd__tt_025C_1v80.lib
+abc -D 5000 -script ../../scripts/abc.speed -liberty /root/skywater-pdk/libraries/sky130_fd_sc_hd/latest/timing/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+setundef -zero
+opt_clean -purge
+
+stat -liberty /root/skywater-pdk/libraries/sky130_fd_sc_hd/latest/timing/sky130_fd_sc_hd__tt_025C_1v80.lib
+
+write_verilog netlist.v
+write_json netlist.json

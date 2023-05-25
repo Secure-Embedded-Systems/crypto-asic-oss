@@ -3,6 +3,7 @@ export PLATFORM    = sky130hd
 
 export SKY130_IO_VERSION ?= v0.2.0
 export IO_DIR       = ./platforms/sky130io
+export PLATFORM_DIR = ./platforms/sky130hd
 
 export VERILOG_FILES = ./crypto-asic-oss/counter/rtl/counter.v \
                        ./crypto-asic-oss/counter/chip/ios.v \
@@ -39,11 +40,13 @@ export ADDITIONAL_LEFS = $(IO_DIR)/lef/sky130_ef_io__gpiov2_pad_wrapped.lef \
 export DIE_AREA    =   0       0  800  800
 export CORE_AREA   =   210   210  590  590
 
-# Use custom power grid with core rings offset from the pads
 export PDN_CFG = ./crypto-asic-oss/counter/chip/pdn.cfg
 
 export MIN_ROUTING_LAYER met1
 export MAX_ROUTING_LAYER met5
 
+# export SETRC_FILE = $(PLATFORM_DIR)/setRC.tcl
+
+# export FASTROUTE_TCL = $(PLATFORM_DIR)/fastroute.tcl
 
 
