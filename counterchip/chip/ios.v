@@ -37,7 +37,9 @@ module input_pad (
   supply1 VDDIO;
   supply1 VDD;
   supply0 VSS;
+   supply0 VSSIO;
 
+   
   wire tie_lo_esd;
   wire tie_low = VSS;
   wire tie_hi = VDD;
@@ -63,6 +65,7 @@ module output_pad (
   supply1 VDDIO;
   supply1 VDD;
   supply0 VSS;
+   supply0 VSSIO;
 
   wire tie_lo_esd;
   wire tie_low = VSS;

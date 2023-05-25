@@ -8,8 +8,8 @@ Footprint definition {
   die_area  {0     0 800  800}
   core_area {210 210 590  590}
 
-  power_nets  "VDD VDDIO"
-  ground_nets "VSS VSSIO"
+  power_nets  "VDDIO VDD"
+  ground_nets "VSSIO VSS"
 
   pin_layer met5
 

@@ -129,6 +129,10 @@ def create_makefile():
         makefile.write('\t(source ../../../../env.sh && cd ../../.. && make DESIGN_CONFIG=crypto-asic-oss/' + FOLDER + '/chip/' + CHIPCONFIG + ' gui_final)\n')
         makefile.write('\n')
 
+        makefile.write('chipclean: \n')
+        makefile.write('\t(source ../../../../env.sh && cd ../../.. && make DESIGN_CONFIG=crypto-asic-oss/' + FOLDER + '/chip/' + CHIPCONFIG + ' clean_all)\n')
+        makefile.write('\n')
+
         makefile.write('clean:\n')
         makefile.write('\trm -f *~ \\\n')
         makefile.write('\ta.out \\\n')
