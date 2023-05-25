@@ -1,0 +1,35 @@
+puts "Loading library IO cell meta-data"
+source $::env(FOOTPRINT_LIBRARY)
+
+puts "Loaded library IO cell data"
+Footprint definition {
+  Type Wirebond
+
+  die_area  {0     0 800  800}
+  core_area {210 210 590  590}
+
+  power_nets  "VDD VDDIO"
+  ground_nets "VSS VSSIO"
+
+  pin_layer met5
+
+  pad_inst_name "u_%s"
+  pad_pin_name "%s"
+
+  padcell {
+    sig1     {type sig       cell {origin {x 360      y 210.965}}}
+    sig2     {type sig       cell {origin {x 440      y 210.965}}}
+    vdd_0    {type vccd_hvc  cell {origin {x 520      y 197.965}}}
+
+    sig5     {type sig       cell {origin {x 280      y 589.035}}}
+    sig6     {type sig       cell {origin {x 360      y 589.035}}}
+    vss_0    {type vssd_hvc  cell {origin {x 440      y 602.035}}}
+
+    sig3     {type sig       cell {origin {x 210.965  y 360}}}
+    v18_0    {type vddio_hvc cell {origin {x 197.965  y 280}}}
+
+    sig4     {type sig       cell {origin {x 589.035  y 440}}}
+    vzz_0    {type vssio_hvc cell {origin {x 602.035  y 360}}}
+    
+  }
+}

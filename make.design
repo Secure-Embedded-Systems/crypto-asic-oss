@@ -9,7 +9,9 @@ all:
 	@echo "   chip         OpenROAD chip synthesis"
 	@echo "   chipgui      OpenROAD GUI"
 	@echo "   chipdata     Extract OpenROAD design data to work dir"
+	@echo "   chipclean    Remove intermediate results from OpenROAD work area"
 	@echo "   clean	       Remove intermediate results from work dir"
+	@echo "   distclean    Global clean crypto-asic-oss"
 
 $(FOLDER)/work/makefile: scripts/gen_make_design.py
 	test -d $(FOLDER)/work || mkdir -p $(FOLDER)/work
@@ -47,6 +49,9 @@ chipdata:
 
 chipgui: 
 	cd $(FOLDER)/work && make chipgui
+
+chipclean:
+	cd $(FOLDER)/work && make chipclean
 
 distclean: Makefile.*
 	@for file in $^; do \

@@ -1,0 +1,10 @@
+sig1	clk_i
+sig2	reset_i
+sig3	q0_o
+sig4	q1_o
+sig5	q2_o
+sig6	q3_o
+vdd_0	VDD
+vss_0	VSS
+v18_0	VDDIO
+vzz_0	VSSIO
