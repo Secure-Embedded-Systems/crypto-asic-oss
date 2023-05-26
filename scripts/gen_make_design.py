@@ -114,34 +114,25 @@ def create_makefile():
         makefile.write('\t--volume=\"/root/.Xauthority:/root/.Xauthority:rw\" \\\n')
         makefile.write('\t-v /usr/share/X11/xkb:/usr/share/X11/xkb \\\n')
         makefile.write('\t-v /root/crypto-asic-oss:/OpenROAD-flow-scripts/flow/crypto-asic-oss \\\n')
-        makefile.write('\topenroad/flow-centos7-builder\n')
+        makefile.write('\tcrypto-asic-oss\n')
         makefile.write('\n')
 
         makefile.write('chip: \n')
         makefile.write('\t(source ../../../../env.sh && cd ../../.. && make DESIGN_CONFIG=crypto-asic-oss/' + FOLDER + '/chip/' + CHIPCONFIG + ')\n')
         makefile.write('\n')
 
-        makefile.write('chipdata: \n')
-        makefile.write('\t(cp -r ../../../logs/sky130hd/' + TOP + ' logs && cp -r ../../../results/sky130hd/' + TOP + ' results && cp -r ../../../reports/sky130hd/' + TOP + ' reports) \n')
+        makefile.write('chipgui: chip\n')
+        makefile.write('\t(source ../../../../env.sh && cd ../../.. && make DESIGN_CONFIG=crypto-asic-oss/' + FOLDER + '/chip/' + CHIPCONFIG + ' gui_final)\n')
         makefile.write('\n')
 
-        makefile.write('chipgui: \n')
-        makefile.write('\t(source ../../../../env.sh && cd ../../.. && make DESIGN_CONFIG=crypto-asic-oss/' + FOLDER + '/chip/' + CHIPCONFIG + ' gui_final)\n')
+        # this assumes that the CHIP topcell is identitical to folder make instead of TOP
+        makefile.write('chipdata: chip\n')
+        makefile.write('\t(cp -r ../../../logs/sky130hd/' + FOLDER + ' logs && cp -r ../../../results/sky130hd/' + FOLDER + ' results && cp -r ../../../reports/sky130hd/' + FOLDER + ' reports) \n')
         makefile.write('\n')
 
         makefile.write('chipclean: \n')
         makefile.write('\t(source ../../../../env.sh && cd ../../.. && make DESIGN_CONFIG=crypto-asic-oss/' + FOLDER + '/chip/' + CHIPCONFIG + ' clean_all)\n')
         makefile.write('\n')
-
-        makefile.write('clean:\n')
-        makefile.write('\trm -f *~ \\\n')
-        makefile.write('\ta.out \\\n')
-        makefile.write('\trtl.vcd \\\n')
-        makefile.write('\tnetlist.v \\\n')
-        makefile.write('\tnetlist.json \\\n')
-        makefile.write('\tnetlist.svg \\\n')
-        makefile.write('\tlib.cmd \\\n')
-        makefile.write('\tnetlist.vcd\n')
 
 def create_synthys():
     yosys_name = FOLDER + '/work/synth.ys'

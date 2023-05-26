@@ -1,5 +1,5 @@
 # base folder of the design
-export FOLDER = counter
+export FOLDER = counterchip
 
 # toplevel module for RTL
 export TOP = counter

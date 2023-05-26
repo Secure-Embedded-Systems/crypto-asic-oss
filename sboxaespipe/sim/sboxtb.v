@@ -24,14 +24,15 @@ module toptb();
 	
 	repeat (256) 
 	  begin
-	     repeat (2)
-	       @(posedge clk);
-	     
+	     repeat (3)
+	       @(posedge clk); #1;
+	     	     
 	     $display("%x -> %x", in, out);
 	     in = in + 8'b1;	     
 	  end
 	
 	$finish;
    end
+
    
 endmodule

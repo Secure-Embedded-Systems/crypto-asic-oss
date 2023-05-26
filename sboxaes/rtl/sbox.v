@@ -2,17 +2,18 @@
 //     Johannes Wolkerstorfer, Elisabeth Oswald, Mario Lamberger:
 //     An ASIC Implementation of the AES SBoxes. CT-RSA 2002: 67-78
 
-module sbox (in, out, clk, scand, scanq);
-   input  [7:0] in;
-   output [7:0] out;
+module sbox (clk, in, out);
    input 	clk;
-   input 	scand;
-   output reg 	scanq;
-
-   always @(posedge clk)
-     scanq <= scand;
+   input  [7:0] in;
+   output reg [7:0] out;
    
-   Stablec S(in, out);
+   wire [7:0] data;
+   
+   always @(posedge clk)
+     out <= data;
+   
+   cbox cbox1(.address(in), .data(data));
+
 endmodule
 
 module map(a, ah, al);
@@ -161,7 +162,7 @@ module afine(a,q);
 
 endmodule
 
-module Stablec (address, data);
+module cbox (address, data);
         input [7:0] address;
         output [7:0] data;      
 

@@ -10,8 +10,10 @@ all:
 	@echo "   chipgui      OpenROAD GUI"
 	@echo "   chipdata     Extract OpenROAD design data to work dir"
 	@echo "   chipclean    Remove intermediate results from OpenROAD work area"
-	@echo "   clean	       Remove intermediate results from work dir"
+	@echo "   clean        Remove intermediate results from work dir"
 	@echo "   distclean    Global clean crypto-asic-oss"
+
+FOLDER ?= .
 
 $(FOLDER)/work/makefile: scripts/gen_make_design.py
 	test -d $(FOLDER)/work || mkdir -p $(FOLDER)/work
@@ -35,8 +37,8 @@ gltiming: $(FOLDER)/work/makefile
 openroad: $(FOLDER)/work/makefile
 	cd $(FOLDER)/work && make openroad
 
-clean: $(FOLDER)/work/makefile
-	cd $(FOLDER)/work && make clean
+clean: 
+	rm -rf $(FOLDER)/work
 
 chip: 
 ifeq ($(wildcard /OpenROAD-flow-scripts/.),)
