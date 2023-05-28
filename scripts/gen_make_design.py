@@ -16,6 +16,11 @@ if 'TOP' in os.environ:
 else:
     sys.exit("Missing TOP definition in Makefile")
 
+if 'CHIPTOP' in os.environ:
+    CHIPTOP     = os.environ['CHIPTOP']
+else:
+    sys.exit("Missing CHIPTOP definition in Makefile")
+
 if 'LIB' in os.environ:
     LIB         = os.environ['LIB']
 else:
@@ -125,9 +130,8 @@ def create_makefile():
         makefile.write('\t(source ../../../../env.sh && cd ../../.. && make DESIGN_CONFIG=crypto-asic-oss/' + FOLDER + '/chip/' + CHIPCONFIG + ' gui_final)\n')
         makefile.write('\n')
 
-        # this assumes that the CHIP topcell is identitical to folder make instead of TOP
         makefile.write('chipdata: chip\n')
-        makefile.write('\t(cp -r ../../../logs/sky130hd/' + FOLDER + ' logs && cp -r ../../../results/sky130hd/' + FOLDER + ' results && cp -r ../../../reports/sky130hd/' + FOLDER + ' reports) \n')
+        makefile.write('\t(cp -r ../../../logs/sky130hd/' + CHIPTOP + ' logs && cp -r ../../../results/sky130hd/' + CHIPTOP + ' results && cp -r ../../../reports/sky130hd/' + CHIPTOP + ' reports) \n')
         makefile.write('\n')
 
         makefile.write('chipclean: \n')

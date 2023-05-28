@@ -3,6 +3,7 @@ export FOLDER = counterchip
 
 # toplevel module for RTL
 export TOP = counter
+export CHIPTOP = counterchip
 # this design has a different top cell for the chip and places pad cells around
 # the counter core. The top cell is called counterchip and is defined in chip/config.mk
 
