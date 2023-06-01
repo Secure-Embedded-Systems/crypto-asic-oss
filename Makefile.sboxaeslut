@@ -1,11 +1,11 @@
 # base folder of the design
-export FOLDER = cipherascon
+export FOLDER = sboxaeslut
 
 # toplevel module
-export TOP = LWC
+export TOP = sboxaeslut
 
 # testbench in $(FOLDER)/sim, creates trace.vcd
-export TB = ascontb.v
+export TB = sboxtb.v
 
 # standard cell library timing
 export LIB = /root/skywater-pdk/libraries/sky130_fd_sc_hd/latest/timing/sky130_fd_sc_hd__tt_025C_1v80.lib
@@ -13,8 +13,8 @@ export LIB = /root/skywater-pdk/libraries/sky130_fd_sc_hd/latest/timing/sky130_f
 # simulation view of cells
 export CELLS = /root/skywater-pdk/libraries/sky130_fd_sc_hd/latest/cells
 
-# clock period
-export CLOCK = 5
+# clock period in ns
+export CLOCK = 1.5
 
 # name of the clock net
 export CLOCKNAME = clk
@@ -26,7 +26,7 @@ export INPUTDELAY = 0
 export OUTPUTDELAY = 0
 
 # synthesis script for logic optimization
-export ABC = abc.speed
+export ABC = abc.area
 
 # chip configuration
 export CHIPCONFIG = config.mk

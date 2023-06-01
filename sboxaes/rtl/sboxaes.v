@@ -2,7 +2,7 @@
 //     Johannes Wolkerstorfer, Elisabeth Oswald, Mario Lamberger:
 //     An ASIC Implementation of the AES SBoxes. CT-RSA 2002: 67-78
 
-module sbox (clk, in, out);
+module sboxaes (clk, in, out);
    input 	clk;
    input  [7:0] in;
    output reg [7:0] out;

@@ -50,8 +50,9 @@ else:
 
 if 'ABC' in os.environ:
     ABC         = os.environ['ABC']
+    abcpresent  = 1
 else:
-    sys.exit("Missing ABC definition in Makefile")
+    abcpresent  = 0
 
 if 'CHIPCONFIG' in os.environ:
     CHIPCONFIG  = os.environ['CHIPCONFIG']
@@ -155,7 +156,10 @@ def create_synthys():
         yosys.write('opt -purge\n')
         yosys.write('\n')
         yosys.write('dfflibmap -liberty ' + LIB + '\n')
-        yosys.write('abc -D ' + str(int(CLOCK) * 1000) + ' -script ../../scripts/' + ABC + ' -liberty ' + LIB + '\n')
+        if (abcpresent == 1):
+            yosys.write('abc -D ' + str(float(CLOCK) * 1000) + ' -constr ../../scripts/abc.constr -script ../../scripts/' + ABC + ' -liberty ' + LIB + '\n')
+        else:
+            yosys.write('abc -D ' + str(float(CLOCK) * 1000) + ' -constr ../../scripts/abc.constr -liberty ' + LIB + '\n')
         yosys.write('\n')
         yosys.write('setundef -zero\n')
         yosys.write('opt_clean -purge\n')

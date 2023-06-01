@@ -6,10 +6,10 @@ module toptb();
    reg 	      clk;
    
    
-   sboxaes dut(.in(in), 
-	       .out(out), 
-	       .clk(clk));
-   
+   sboxaeslut dut(.in(in), 
+	          .out(out), 
+	          .clk(clk));
+
    always begin
       clk = 1'b0;
       #5 clk = 1'b1;
