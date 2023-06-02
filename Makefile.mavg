@@ -20,7 +20,7 @@ export CLOCK = 4
 export CLOCKNAME = clk
 
 # input delay constraint, normally 0
-export INPUTDELAY = 0
+export INPUTDELAY = 1
 
 # output delay constraint, normally 0
 export OUTPUTDELAY = 0

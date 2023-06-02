@@ -1,8 +1,12 @@
 `timescale 1ns / 1ps
 
 `define AES_KEY 128'hfb0b38bcad60b76c73377dfd9ce5692f
-`define AES_PLAINTEXT 128'hfb8587bdac1c369369173bceb2ed4785
-`define AES_CIPHERTEXT 128'h2287d7fc410a4e2059c15b4a2a2b3375
+
+`define AES_PLAINTEXT1  128'h16b576b600a49804d81267644b80e292
+`define AES_CIPHERTEXT1 128'h33b661a74d164dc7b811f54fe5a5832c
+
+`define AES_PLAINTEXT2  128'hfb8587bdac1c369369173bceb2ed4785
+`define AES_CIPHERTEXT2 128'h2287d7fc410a4e2059c15b4a2a2b3375
 
 module toptb;
 
@@ -55,13 +59,6 @@ module toptb;
    
    reg     op_running;
    
-`ifdef GATELEVEL
-   initial $sdf_annotate("picoaes.sdf", test_picoaes.uut, , ,"MAXIMUM");
-`endif
-`ifdef POSTROUTE
-   initial $sdf_annotate("picoaes.sdf", test_picoaes.uut, , ,"MAXIMUM");
-`endif
-   
    initial begin
       $dumpfile("trace.vcd");
       $dumpvars(0, toptb);
@@ -73,7 +70,7 @@ module toptb;
       
       @ (negedge clk);
       
-      state  = `AES_PLAINTEXT; 
+      state  = `AES_PLAINTEXT1; 
       key    = `AES_KEY;
       rstn    = 1'b1;
       
@@ -203,10 +200,150 @@ module toptb;
       $display("Key:        %x", key);
       $display("Ciphertext: %x", out);
       
-      if (out !== `AES_CIPHERTEXT)
-        $display("Ciphertext ERROR - expected %x", `AES_CIPHERTEXT); 
+      if (out !== `AES_CIPHERTEXT1)
+        $display("Ciphertext ERROR - expected %x", `AES_CIPHERTEXT1); 
       else
 	$display("Ciphertext CORRECT");
+
+      repeat(5) @(posedge clk);
+
+      @ (negedge clk);
+      
+      state  = `AES_PLAINTEXT2; 
+      key    = `AES_KEY;
+      rstn    = 1'b1;
+      
+      addr    = KEYW3_ADDR;
+      wdata   = key[31:0];
+      wen     = 1'b1;
+      @ (posedge clk);
+      #1 ;
+      
+      addr    = KEYW2_ADDR;
+      wdata   = key[63:32];
+      wen     = 1'b1;
+      @ (posedge clk);
+      #1 ;
+      
+      wdata   = key[95:64];
+      addr    = KEYW1_ADDR;
+      wen     = 1'b1;
+      @ (posedge clk);
+      #1 ;
+
+      wdata   = key[127:96];
+      addr    = KEYW0_ADDR;
+      wen     = 1'b1;
+      @ (posedge clk);
+      #1 ;
+      
+      wdata   = state[31:0];
+      addr    = PTW3_ADDR;
+      wen     = 1'b1;
+      @ (posedge clk);
+      #1 ;
+      
+      wdata   = state[63:32];
+      addr    = PTW2_ADDR;
+      wen     = 1'b1;
+      @ (posedge clk);
+      #1 ;
+      
+      wdata   = state[95:64];
+      addr    = PTW1_ADDR;
+      wen     = 1'b1;
+      @ (posedge clk);
+      #1 ;
+      
+      wdata   = state[127:96];
+      addr    = PTW0_ADDR;
+      wen     = 1'b1;
+      @ (posedge clk);
+      #1 ;
+      
+      wdata   = 32'h6;
+      addr    = CTRL_ADDR;
+      wen     = 1'b1;
+      @ (posedge clk);
+      #1 ;
+      
+      wdata   = 32'h6;
+      addr    = CTRL_ADDR;
+      wen     = 1'b1;
+      @ (posedge clk);
+      #1 ;
+      
+      wdata   = 32'h4;      
+      addr    = CTRL_ADDR;
+      wen     = 1'b1;
+      @ (posedge clk);
+      #1 ;
+      
+      wdata   = 32'h4;      
+      addr    = CTRL_ADDR;
+      wen     = 1'b1;
+      @ (posedge clk);
+      #1 ;
+      
+      wen     = 1'b0;
+      addr    = CTRL_ADDR;
+      @ (posedge clk);
+      #1 ;
+      
+      op_running = 1'b1;
+      while (op_running)
+        begin
+           wen     = 1'b0;
+           addr    = STATUS_ADDR;
+           @ (negedge clk);
+           op_running = ((rdata & 32'h1) == 0);
+           @ (posedge clk);	    
+        end
+      
+      wen     = 1'b0;
+      addr    = CTRL_ADDR;
+      @ (posedge clk);
+      #1 ;
+      
+      addr        = CTW3_ADDR;
+      wen         = 1'b0;
+      @ (negedge clk) ;
+      out[31:0]   = rdata;
+      @ (posedge clk);
+      #1 ;
+      
+      addr        = CTW2_ADDR;
+      wen         = 1'b0;
+      @ (negedge clk);
+      out[63:32]  = rdata;
+      @ (posedge clk);
+      #1 ;
+      
+      addr        = CTW1_ADDR;
+      wen         = 1'b0;
+      @ (negedge clk);
+      out[95:64]  = rdata;
+      @ (posedge clk);
+      #1 ;
+      
+      addr        = CTW0_ADDR;
+      wen         = 1'b0;
+      @ (negedge clk);
+      out[127:96] = rdata;
+      @ (posedge clk);
+      #1 ;
+      
+      @(negedge clk);
+      
+      $display("Plaintext:  %x", state);
+      $display("Key:        %x", key);
+      $display("Ciphertext: %x", out);
+      
+      if (out !== `AES_CIPHERTEXT2)
+        $display("Ciphertext ERROR - expected %x", `AES_CIPHERTEXT2); 
+      else
+	$display("Ciphertext CORRECT");
+      
       
       $finish;
    end

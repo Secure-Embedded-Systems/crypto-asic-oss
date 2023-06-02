@@ -14,7 +14,7 @@ export LIB = /root/skywater-pdk/libraries/sky130_fd_sc_hd/latest/timing/sky130_f
 export CELLS = /root/skywater-pdk/libraries/sky130_fd_sc_hd/latest/cells
 
 # clock period in ns
-export CLOCK = 3
+export CLOCK = 5
 
 # name of the clock net
 export CLOCKNAME = clk
@@ -26,7 +26,7 @@ export INPUTDELAY = 0
 export OUTPUTDELAY = 0
 
 # synthesis script for logic optimization
-export ABC = abc.speed
+export ABC = abc.area
 
 # chip configuration
 export CHIPCONFIG = config.mk

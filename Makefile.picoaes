@@ -31,5 +31,10 @@ export ABC = abc.area
 # chip configuration
 export CHIPCONFIG = config.mk
 
+# false path constraints to prevent reset being flagged as critical path:
+# # soft_reset register path
+# set_false_path -from _36987_
+# set_false_path -from resetn
+
 # don't touch
 include make.design
